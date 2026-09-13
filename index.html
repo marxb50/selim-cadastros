@@ -765,8 +765,8 @@
               <button type="button" class="btn-fiscal" onclick="selectFiscal(this, 'carreta', 'Luis Paulo Silva de Souza')">
                 <i class="fa-solid fa-user-check"></i> Luis Paulo Silva de Souza
               </button>
-              <button type="button" class="btn-fiscal" onclick="selectFiscal(this, 'carreta', 'Rodrigo Magrinho de Santana')">
-                <i class="fa-solid fa-user-check"></i> Rodrigo Magrinho de Santana
+              <button type="button" class="btn-fiscal" onclick="selectFiscal(this, 'carreta', 'Rodrigo Marinho de Santana')">
+                <i class="fa-solid fa-user-check"></i> Rodrigo Marinho de Santana
               </button>
             </div>
             <input type="hidden" id="carreta-fiscal" value="José Domingos de Oliveira">
@@ -884,8 +884,8 @@
               <button type="button" class="btn-fiscal" onclick="selectFiscal(this, 'coletor', 'Luis Paulo Silva de Souza')">
                 <i class="fa-solid fa-user-check"></i> Luis Paulo Silva de Souza
               </button>
-              <button type="button" class="btn-fiscal" onclick="selectFiscal(this, 'coletor', 'Rodrigo Magrinho de Santana')">
-                <i class="fa-solid fa-user-check"></i> Rodrigo Magrinho de Santana
+              <button type="button" class="btn-fiscal" onclick="selectFiscal(this, 'coletor', 'Rodrigo Marinho de Santana')">
+                <i class="fa-solid fa-user-check"></i> Rodrigo Marinho de Santana
               </button>
             </div>
             <input type="hidden" id="coletor-fiscal" value="José Domingos de Oliveira">
@@ -1041,12 +1041,25 @@
           formData.append('entry.469154417', (obs ? obs + ' | ' : '') + 'Placa: ' + placa + ' - Manifesto: ' + manifesto);
         }
 
+        // Submit to Google Form
         fetch(FORM_CARRETAS_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: formData.toString()
         }).catch(err => console.log('Form fetch note:', err));
+
+        // If fiscal is Rodrigo Marinho, also send form-compatible fallback in case Google Form option has not been renamed yet
+        if (fiscal.includes('Marinho')) {
+          const fallbackData = new URLSearchParams(formData);
+          fallbackData.set('entry.696955488', 'Rodrigo Magrinho de Santana');
+          fetch(FORM_CARRETAS_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: fallbackData.toString()
+          }).catch(err => console.log('Fallback note:', err));
+        }
       } catch (err) {
         console.error('Error posting to form:', err);
       }
@@ -1119,12 +1132,25 @@
         }
         formData.append('entry.431863408', '');
 
+        // Submit to Google Form
         fetch(FORM_COLETORES_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: formData.toString()
         }).catch(err => console.log('Form fetch note:', err));
+
+        // If fiscal is Rodrigo Marinho, also send form-compatible fallback in case Google Form option has not been renamed yet
+        if (fiscal.includes('Marinho')) {
+          const fallbackData = new URLSearchParams(formData);
+          fallbackData.set('entry.1918868489', 'Rodrigo Magrinho de Santana');
+          fetch(FORM_COLETORES_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: fallbackData.toString()
+          }).catch(err => console.log('Fallback note:', err));
+        }
       } catch (err) {
         console.error('Error posting coletor to form:', err);
       }
